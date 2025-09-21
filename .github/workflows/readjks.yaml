@@ -1,0 +1,20 @@
+name: Check JKS Certificate Expiry
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'jks'
+
+jobs:
+  check-jks-expiry:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: List certificates in JKS and show expiry
+        run: |
+          KEYSTORE_FILE="test.jks"
+          KEYSTORE_PASS="your_keystore_password"
+          keytool -list -v -keystore "$KEYSTORE_FILE" -storepass "$KEYSTORE_PASS" | grep -E 'Alias name|Valid from'
