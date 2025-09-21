@@ -2,7 +2,6 @@ name: Check JKS Certificate Expiry
 
 on:
   workflow_dispatch:
- 
 
 jobs:
   check-jks-expiry:
@@ -11,8 +10,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: List certificates in JKS and show expiry
+      - name: Decode Keystore from Secret
         run: |
-          KEYSTORE_FILE="mykeystore.jks"
-          KEYSTORE_PASS="mykeypassword"
-          keytool -list -v -keystore "$KEYSTORE_FILE" -storepass "$KEYSTORE_PASS" | grep -E 'Alias name|Valid from'
+          # Recreate the JKS file from the Base64 encoded secret
+          echo "${{ secrets.JKS_FILE_B64 }}" | base64 --decode > mykeystore.jks
+
+      - name: List certificates and show expiry date
+        run: |
+          # Use the secret for the password and reference the newly created file
+          keytool -list -v -keystore mykeystore.jks -storepass "${{ secrets.JKS_PASSWORD }}" | grep "until:"
