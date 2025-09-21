@@ -2,9 +2,7 @@ name: Check JKS Certificate Expiry
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'jks'
+ 
 
 jobs:
   check-jks-expiry:
@@ -15,6 +13,6 @@ jobs:
 
       - name: List certificates in JKS and show expiry
         run: |
-          KEYSTORE_FILE="test.jks"
-          KEYSTORE_PASS="your_keystore_password"
+          KEYSTORE_FILE="mykeystore.jks"
+          KEYSTORE_PASS="mykeypassword"
           keytool -list -v -keystore "$KEYSTORE_FILE" -storepass "$KEYSTORE_PASS" | grep -E 'Alias name|Valid from'
