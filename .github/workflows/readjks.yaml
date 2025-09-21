@@ -1,19 +1,28 @@
 name: Check JKS Certificate Expiry
 
 on:
+  # This allows you to run the workflow manually from the Actions tab
   workflow_dispatch:
+  
+  # This new section triggers the workflow on pushes to the 'main' branch
+  push:
+    branches:
+      - main
 
 jobs:
   check-jks-expiry:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Decode Keystore from Secret
         run: |
-          # Recreate the JKS file from the Base64 encoded secret
           echo "${{ secrets.JKS_FILE_B64 }}" | base64 --decode > mykeystore.jks
+
+      - name: Check if Keystore File Exists
+        run: |
+          ls -l mykeystore.jks
 
       - name: List certificates and show expiry date
         run: |
