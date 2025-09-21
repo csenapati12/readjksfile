@@ -27,4 +27,4 @@ jobs:
       - name: List certificates and show expiry date
         run: |
           # Use the secret for the password and reference the newly created file
-          keytool -list -v -keystore mykeystore.jks -storepass "${{ secrets.JKS_PASSWORD }}" | grep "until:"
+          keytool -list -v -keystore mykeystore.jks -storepass "${{ secrets.JKS_PASSWORD }}"
